@@ -8,11 +8,18 @@ Minigram 是一个最小化的tg私信机器人实现，私信模块代码**去�
 
 <br>
 
+## 注意：
+
+本readme为完整配置教程，如需获取简单版本配置教程，可访问 [Simple.md](simple.md) 文件
+
+
+<br><br>
+
 ### 0x00 现有问题
 
 tg 私信bot容易收到垃圾信息，我稍微研究了一下。很多实现都是在tg中回答问题，或者点击按钮来验证。
 
-#### 1.TG 内问答 验证：
+#### 1. TG 内问答验证：
 
 由于输入输出都很少，使用4o‑mini / gemini‑flash 这种便宜模型，每次验证：输入/输出大概几十 token
          
@@ -20,9 +27,9 @@ tg 私信bot容易收到垃圾信息，我稍微研究了一下。很多实现�
       
 <br>
 	  
-#### 2.Button / Inline Keyboard 验证
+#### 2. Button / Inline Keyboard 验证
 
-这种长这样：“请点击正确的按钮” 验证或者选择正确对象/图片
+这种长这样：“**请点击正确的按钮**” 验证或者选择正确按钮对象/图片
      
 但是问题是： 
 
@@ -65,7 +72,7 @@ tg 私信bot容易收到垃圾信息，我稍微研究了一下。很多实现�
 
 首先你要准备几个变量，下面以使用CF Worker部署，并Turnstile为人机验证方式示例
 
-> 注意，理论上支持所有验证方法，包括Turnstile，reCaptcha，hCaptcha只需要修改captcha.js文件即可（此文件代码不到100行，即使AI修改也轻而易举）
+> 注意，理论上支持所有验证方法，包括Turnstile，reCaptcha，hCaptcha只需要修改**captcha.js**文件即可（此文件代码不到100行，即使AI修改也轻而易举）
 
 <br>
 
@@ -99,11 +106,12 @@ const verify_URL //人机验证回调地址
 ![](img/v1.jpg?raw=true)
 
 长的为**Captcha_SECRET_KEY**
+
 短的为**Captcha_SITE_KEY**
 
 ```js
-const Captcha_SECRET_KEY = "3x00000000000000000000FF"
-const Captcha_SITE_KEY = "0x30000000000000000ADEA5247AFFFFFFF"
+const Captcha_SECRET_KEY = "0x30000000000000000ADEA5247AFFFFFFF"
+const Captcha_SITE_KEY = "3x00000000000000000000FF"
 ```
 
 <br>
@@ -125,7 +133,9 @@ const verify_SECRET = "u0zcgbzN4vYJpEmzs0yR"
 <br>
 
 #### 3.生成SECRET_path，SECRET_uuid
+
 **SECRET_path** 这个随便想一个路径，不容易被别人猜到就行
+
 **SECRET_uuid** 找一个uuid生成器，比如 uuidgenerator.net
 
 
@@ -136,7 +146,7 @@ const SECRET_uuid = "056a8dca-9279-4ba9-85e8-0830fd846eb0" //这个自己生成
 
 <br>
 
-### 4.生成SECRET_BOT_TOKEN
+#### 4.生成SECRET_BOT_TOKEN
 
 去[@BotFather](https://t.me/BotFather) 发送 /newbot 命令，设置完了的bot用户名，会返回一个token。大概是这种格式
 
@@ -167,9 +177,9 @@ const self_uid = "6123456789"
 
 #### 6.构造verify_URL
 
-你第一步部署Turnstile的时候，不是设置了一个站点verify.example.com嘛。
+你第一步部署Turnstile的时候，应该设置了一个站点verify.example.com。
 
-这个就直接填哪个站点就行了。
+这个就直接填那个站点就行了。
 
 ```js
 const verify_URL = "https://verify.example.com/myapp"
@@ -189,8 +199,8 @@ const verify_URL = "https://verify.example.com/myapp"
 开始之前，已经有以下变量了
 
 ```js
-const Captcha_SECRET_KEY = "3x00000000000000000000FF"
-const Captcha_SITE_KEY = "0x30000000000000000ADEA5247AFFFFFFF"
+const Captcha_SECRET_KEY = "0x30000000000000000ADEA5247AFFFFFFF"
+const Captcha_SITE_KEY = "3x00000000000000000000FF"
 
 const verify_SECRET = "u0zcgbzN4vYJpEmzs0yR"
 
@@ -222,8 +232,8 @@ const verify_URL = "https://verify.example.com/myapp"
 
 查看上面的
 ```js
-const Captcha_SECRET_KEY = "3x00000000000000000000FF"
-const Captcha_SITE_KEY = "0x30000000000000000ADEA5247AFFFFFFF"
+const Captcha_SECRET_KEY = "0x30000000000000000ADEA5247AFFFFFFF"
+const Captcha_SITE_KEY = "3x00000000000000000000FF"
 const verify_SECRET = "u0zcgbzN4vYJpEmzs0yR"
 ```
 
@@ -231,14 +241,19 @@ const verify_SECRET = "u0zcgbzN4vYJpEmzs0yR"
 
 密钥与纯文本都是变量类型。区别只是前端会不会显示而已
 
-然后转到部署，修改代码，把**captcha.js**文件的代码全部粘贴上去即可。
-
 ![](img/v7.jpg?raw=true)
 
-绑定worker路由
+然后转到部署，修改代码，把**captcha.js**文件的代码全部粘贴上去即可。
 
-路由为
+<br>
 
+#### 部署完成之后
+
+#### 绑定worker路由
+
+路由为之前设置的verify.example.com/myapp
+
+那么worker路由为
 verify.example.com/myapp*
 
 ![](img/v8.jpg?raw=true)
@@ -310,12 +325,12 @@ tgbot.example.com/*
 
 #### 2.3 部署tg worker代码。
 
-在原先基础上，再次编辑worker代码（直接修改register_bot.js代码，不需要新建）
+在原先基础上，再次编辑worker代码（直接修改**register_bot.js**代码，不需要新建）
 
 ![](img/v7.jpg?raw=true)
 
 
-把**tg_worker.js**的内容复制进去，替换掉之前worker代码。
+把原**register_bot.js**代码清空，**tg_worker.js**的内容复制进去，替换掉之前worker代码。
 
 #### 2.4 绑定KV命名空间
 
@@ -375,12 +390,20 @@ tgbot.example.com/*
 
 人机验证默认每一个用户只会验证一次。如需设置验证有效期，修改以下代码
 
-修改： await MY_KV.put(uid_str,"1")
-为：await MY_KV.put(uid_str,"1", { expirationTtl: 3600*24*15 }) 即可设置有效期。例子是设置为3600*24*15秒，即15天
+修改： 
+```js
+await MY_KV.put(uid_str,"1")
+```
+为
+
+```js
+await MY_KV.put(uid_str,"1", { expirationTtl: 3600*24*15 }) //即可设置有效期。例子是设置为3600*24*15秒，即15天
+```
 
 <br>
 
 
 ---
+
 
 **Minigram —— 简单、纯粹 Telegram 私信机器人**
