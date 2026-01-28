@@ -9,7 +9,7 @@
 
 5. 使用openssl rand -base64 15生成verify_SECRET，填入verify_SECRET
 
-4. 登录[cloudflare](https://workers.cloudflare.com/)，创建一个Turnstile，获取**SECRET_KEY** 与 **SITE_KEY**，填入Captcha_SECRET_KEY，verify_SECRET 
+4. 登录[cloudflare](https://workers.cloudflare.com/)，创建一个Turnstile，获取**SECRET_KEY** 与 **SITE_KEY**，填入Captcha_SECRET_KEY，Captcha_SITE_KEY 
 
 以下变量成功获取完了
 ```js
